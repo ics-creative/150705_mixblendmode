@@ -1,56 +1,57 @@
 <!DOCTYPE html>
-<html lang="ja" ng-app="ui.bootstrap.demo">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=960px, initial-scale=1.0">
-  <title>CSS3 mix-blend-mode Sample - ICS</title>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js" defer></script>
-  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.0.js" defer></script>
-  <script src="js/main.js" defer></script>
-</head>
-<body ng-controller="MyAppCtrl">
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=960px, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
+    <meta name="color-scheme" content="dark" />
+    <title>CSS mix-blend-mode Sample - ICS</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/main.js" type="module"></script>
+  </head>
+  <body id="app">
+    <div class="wrap" :class="isLook3d == true ? 'look-3d' : ''">
+      <div class="carouselContainer">
+        <div class="carousel">
+          <div v-for="slide in slides" class="carouselCard">
+            <img :src="slide" style="margin: auto" width="960" height="540" />
+          </div>
+        </div>
 
-  <div class="wrap" ng-class="isLook3d == true ? 'look-3d' : ''">
+        <img
+          class="overlay"
+          width="960"
+          height="540"
+          src="imgs/overlay.png"
+          :style="{'mix-blend-mode' : currentBlendMode}"
+        />
 
-    <div id="carouselContainer">
-
-      <div id="carouselItem" ng-controller="CarouselDemoCtrl">
-        <carousel interval="myInterval" animate="enabled">
-          <slide ng-repeat="slide in slides" active="slide.active">
-            <img ng-src="{{slide.image}}" style="margin:auto;" width="960" height="540">
-          </slide>
-        </carousel>
+        <div class="dot-container">
+          <button
+            type="button"
+            class="dot"
+            v-for="(_, index) in slides"
+            @click="onClickSlide(index)"
+            :aria-current="photoIndex === index"
+            :aria-label="'背景写真: ' + (index + 1)"
+          ></button>
+        </div>
       </div>
 
-      <img id="overlayImage"
-           width="960" height="540"
-           src="imgs/overlay.png"
-           ng-style="{'mix-blend-mode' : currentBlendMode}">
-    </div>
-
-    <div id="dropDownBlendMode" ng-controller="DropdownCtrl">
-      <!-- Single button -->
-      <div class="btn-group" dropdown is-open="status.isopen" on-toggle="toggled(open)">
-        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
-          {{currentLabel}} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li ng-repeat="item in items" ng-class="item.isDivider ? 'divider' : ''">
-            <a href ng-if="item.isDivider == false" ng-click="setAction(item)">
-              {{item.label}}
-              ({{item.data}})
-            </a>
-          </li>
-        </ul>
+      <div class="dropDown">
+        <select @change="onChange">
+          <optgroup v-for="group in blendModes" label="------------------------">
+            <option v-for="mode in group" :value="mode.data">
+              {{mode.label}}
+            </option>
+          </optgroup>
+        </select>
       </div>
-    </div>
 
-    <label class="checkbox">
-      <input type="checkbox" ng-model="isLook3d">
-      Look Layers
-    </label>
-  </div>
-</body>
+      <label class="checkbox">
+        <input type="checkbox" v-model="isLook3d" />
+        Look Layers
+      </label>
+    </div>
+  </body>
 </html>

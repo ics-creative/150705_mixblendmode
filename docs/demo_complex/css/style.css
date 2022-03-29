@@ -1,48 +1,107 @@
 body {
-  background: #888; }
+  background: #333;
+  font-family: sans-serif;
+}
 
 .wrap {
   width: 960px;
   height: 540px;
-  position: relative; }
-  .wrap #carouselItem, .wrap #overlayImage, .wrap .checkbox {
-    position: absolute; }
-  .wrap #overlayImage {
-    pointer-events: none;
-    mix-blend-mode: multiply; }
-  .wrap .checkbox {
-    top: 15px;
-    right: 20px;
-    z-index: 10;
-    color: aliceblue; }
-  .wrap #dropDownBlendMode {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 10; }
-  .wrap #dropDownOverlayImage {
-    position: absolute;
-    top: 20px;
-    left: 200px;
-    z-index: 10; }
-  .wrap #carouselContainer {
-    transition: all 1.0s;
-    perspective: 960px; }
-  .wrap #carouselItem {
-    transition: all 1.0s; }
-  .wrap #overlayImage {
-    transition: all 1.0s;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    display: block; }
-  .wrap.look-3d #carouselContainer {
-    transform: rotateX(30deg) rotateY(-35deg); }
-  .wrap.look-3d #carouselItem {
-    transform: translate3d(0, 0, -50px); }
-  .wrap.look-3d #overlayImage {
-    transform: translate3d(0, 0, 50px); }
-  .wrap .dropdown-menu .divider {
-    margin: 4px 0; }
-  .wrap .carousel .carousel-control {
-    visibility: hidden; }
+  position: relative;
+  margin: 0 auto;
+}
 
-/*# sourceMappingURL=style.css.map */
+.wrap.look-3d .carouselContainer {
+  transform: rotateX(30deg) rotateY(-35deg);
+}
+
+.wrap.look-3d .carousel {
+  transform: translate3d(0, 0, -50px);
+}
+
+.wrap.look-3d .overlay {
+  transform: translate3d(0, 0, 50px);
+}
+
+.overlay {
+  position: absolute;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.checkbox {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 20;
+  color: aliceblue;
+}
+
+.dropDown {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.carouselContainer {
+  transition: all 1s;
+  perspective: 960px;
+  position: relative;
+  height: 540px;
+}
+
+.carousel {
+  display: flex;
+  aspect-ratio: 16/9;
+  width: 960px;
+  height: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  transition: all 1s;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  user-select: none;
+}
+
+.carouselCard {
+  scroll-snap-align: start;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  transition: all 1s;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  display: block;
+}
+
+.dot-container {
+  position: absolute;
+  left: 0;
+  bottom: 32px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  transition: 0.3s;
+  appearance: none;
+  border: none;
+  padding: 0;
+}
+
+.dot[aria-current="true"] {
+  background-color: #39f;
+}
+
+select {
+  padding: 0.5em 1em;
+  font-size: 1.2rem;
+}
