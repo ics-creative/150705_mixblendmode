@@ -40,7 +40,7 @@
 
       <div class="dropDown">
         <select @change="onChange">
-          <optgroup v-for="group in blendModes" label="------------------------">
+          <optgroup v-for="group in blendModes">
             <option v-for="mode in group" :value="mode.data">
               {{mode.label}}
             </option>
