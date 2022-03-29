@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="google" content="notranslate"/>
+  <title>mix-blend-mode: plus-lighter Example | ics.media</title>
+  <meta name="color-scheme" content="dark"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #333333;
+      margin-bottom: 5em;
+    }
+
+    #app {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .container {
+      /* 市松模様の背景 */
+      background-image: repeating-conic-gradient(
+        white 0,
+        white 25%,
+        #eee 25%,
+        #eee 50%
+      );
+      background-size: 32px 32px;
+      background-position: center center;
+    }
+
+
+    .container-logo {
+      position: relative;
+      aspect-ratio: 16/9;
+      isolation: isolate; /* 重ね合わせコンテキストを有効にする */
+    }
+
+    .container_p {
+      /* 市松模様の背景 */
+      background-image: repeating-conic-gradient(
+        white 0,
+        white 25%,
+        #888 25%,
+        #888 50%
+      );
+    }
+    .container-photo {
+      position: relative;
+      aspect-ratio: 4/3;
+      isolation: isolate; /* 重ね合わせコンテキストを有効にする */
+    }
+
+    .item {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .item img {
+      width: 100%;
+      height: auto;
+    }
+
+    .item.is-active {
+      opacity: 1;
+    }
+
+    .item.is-hidden {
+      opacity: 0;
+    }
+
+    .item.enable-pl {
+      /* 重ね合わせる */
+      mix-blend-mode: plus-lighter;
+    }
+
+    .item-photo {
+      transition: 2s linear;
+    }
+
+    .container-photo.enable-pl .item-photo {
+      /* 重ね合わせる */
+      mix-blend-mode: plus-lighter;
+    }
+
+    .dot-container {
+      position: absolute;
+      left: 0;
+      bottom: 32px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+      transition: 0.3s;
+    }
+
+    .dot.is-active {
+      background-color: #007bff;
+    }
+
+    label.strong {
+      font-size: 1.5rem;
+    }
+
+    label.strong input {
+      zoom: 1.5;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1>mix-blend-mode: plus-lighter Example</h1>
+  <h2>Opacity Transition</h2>
+  <div class="container">
+    <div class="container-logo">
+      <div class="item" :style="{opacity: 1.0 - percent}">
+        <img src="images/logo_1.webp" width="1920" height="1080" alt=""/>
+      </div>
+      <div
+        class="item"
+        :class="enablePlLogo ? 'enable-pl' : ''"
+        :style="{opacity: percent}"
+      >
+        <img src="images/logo_2.webp" width="1920" height="1080" alt=""/>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    <label>
+      A
+      <input type="range" min="0" max="1" step="0.001" v-model="percent" style="width: 75%"/>
+      B
+    </label>
+    /
+    <span>{{Math.round(percent * 100)}} %</span>
+  </p>
+
+  <p>
+    <label class="strong">
+      <input type="checkbox" v-model="enablePlLogo" />
+      mix-blend-mode: plus-lighter
+    </label>
+  </p>
+
+  <h2>Slideshow</h2>
+  <div class="container container_p">
+    <div class="container-photo" :class="enablePlPhoto ? 'enable-pl' : ''">
+      <div
+        class="item item-photo"
+        v-for="(photo, index) in photos"
+        :class="photoIndex === index ? 'is-active' : 'is-hidden'"
+      >
+        <img :src="'images/' + photo" width="1920" height="1440" alt=""/>
+      </div>
+      <div>
+        <div class="dot-container">
+          <div
+            class="dot"
+            v-for="(photo, index) in photos"
+            :class="photoIndex === index ? 'is-active' : 'is-hidden'"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p>
+    <label class="strong">
+      <input type="checkbox" v-model="enablePlPhoto"/>
+      mix-blend-mode: plus-lighter
+    </label>
+  </p>
+
+  <address>Created by IKEDA Yasunobu, &copy; ICS INC.</address>
+</div>
+
+
+<script type="module">
+  import {
+    ref,
+    createApp,
+    onMounted,
+  } from "https://unpkg.com/vue@3.2.21/dist/vue.esm-browser.js";
+
+  const app = createApp({
+    setup() {
+      const enablePlLogo = ref(false);
+      const enablePlPhoto = ref(false);
+      const percent = ref(1.0);
+      const photos = [
+        "photo_1.webp",
+        "photo_2.webp",
+        "photo_3.webp",
+        "photo_4.webp",
+        "photo_5.webp",
+      ];
+
+      const photoIndex = ref(0);
+      onMounted(() => {
+        setInterval(() => {
+          let next = photoIndex.value + 1;
+          if (next >= photos.length) {
+            next = 0;
+          }
+          photoIndex.value = next;
+        }, 3_000);
+      });
+      return {
+        enablePlLogo,
+        percent,
+        enablePlPhoto,
+        photoIndex,
+        photos,
+      };
+    },
+  });
+  app.mount("#app");
+</script>
+</body>
+</html>
