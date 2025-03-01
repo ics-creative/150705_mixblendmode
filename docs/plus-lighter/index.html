@@ -21,10 +21,10 @@
     .container {
       /* 市松模様の背景 */
       background-image: repeating-conic-gradient(
-        white 0,
-        white 25%,
-        #eee 25%,
-        #eee 50%
+              white 0,
+              white 25%,
+              #eee 25%,
+              #eee 50%
       );
       background-size: 32px 32px;
       background-position: center center;
@@ -40,12 +40,13 @@
     .container_p {
       /* 市松模様の背景 */
       background-image: repeating-conic-gradient(
-        white 0,
-        white 25%,
-        #888 25%,
-        #888 50%
+              white 0,
+              white 25%,
+              #888 25%,
+              #888 50%
       );
     }
+
     .container-photo {
       position: relative;
       aspect-ratio: 4/3;
@@ -77,7 +78,7 @@
     }
 
     .item-photo {
-      transition: 2s linear;
+      transition: 1.0s linear;
     }
 
     .container-photo.enable-pl .item-photo {
@@ -107,11 +108,17 @@
       background-color: #007bff;
     }
 
-    label.strong {
+    .code{
+      font-family: monospace;
       font-size: 1.5rem;
     }
+    .strong {
 
-    label.strong input {
+      font-weight: bold;
+      font-family: inherit;
+    }
+
+    .strong input {
       zoom: 1.5;
     }
   </style>
@@ -126,9 +133,9 @@
         <img src="images/logo_1.webp" width="1920" height="1080" alt=""/>
       </div>
       <div
-        class="item"
-        :class="enablePlLogo ? 'enable-pl' : ''"
-        :style="{opacity: percent}"
+              class="item"
+              :class="enablePlLogo === 'plus-lighter' ? 'enable-pl' : ''"
+              :style="{opacity: percent}"
       >
         <img src="images/logo_2.webp" width="1920" height="1080" alt=""/>
       </div>
@@ -145,56 +152,75 @@
     <span>{{Math.round(percent * 100)}} %</span>
   </p>
 
-  <p>
+  <p class="code">
+    mix-blend-mode:
     <label class="strong">
-      <input type="checkbox" v-model="enablePlLogo" />
-      mix-blend-mode: plus-lighter
+      <input type="radio" name="plLogo" value="normal" v-model="enablePlLogo"/>
+      normal
+    </label>
+    <label class="strong">
+      <input type="radio" name="plLogo" value="plus-lighter" v-model="enablePlLogo"/>
+      plus-lighter
     </label>
   </p>
+  <p>plus-lighterだと、クロスフェードの途中での背景透過を防げます。とくに黒文字部分の透過について注目ください。normalだと半透過するのに対して、plus-lighterでは不透過のままです。</p>
 
   <h2>Slideshow</h2>
   <div class="container container_p">
-    <div class="container-photo" :class="enablePlPhoto ? 'enable-pl' : ''">
+    <div class="container-photo" :class="enablePlPhoto === 'plus-lighter' ? 'enable-pl' : ''">
       <div
-        class="item item-photo"
-        v-for="(photo, index) in photos"
-        :class="photoIndex === index ? 'is-active' : 'is-hidden'"
+              class="item item-photo"
+              v-for="(photo, index) in photos"
+              :class="photoIndex === index ? 'is-active' : 'is-hidden'"
       >
         <img :src="'images/' + photo" width="1920" height="1440" alt=""/>
       </div>
       <div>
         <div class="dot-container">
           <div
-            class="dot"
-            v-for="(photo, index) in photos"
-            :class="photoIndex === index ? 'is-active' : 'is-hidden'"
+                  class="dot"
+                  v-for="(photo, index) in photos"
+                  :class="photoIndex === index ? 'is-active' : 'is-hidden'"
           ></div>
         </div>
       </div>
     </div>
   </div>
-  <p>
+  <p class="code">
+    mix-blend-mode:
     <label class="strong">
-      <input type="checkbox" v-model="enablePlPhoto"/>
-      mix-blend-mode: plus-lighter
+      <input type="radio" name="plPhoto" value="normal" v-model="enablePlPhoto"/>
+      normal
+    </label>
+    <label class="strong">
+      <input type="radio" name="plPhoto" value="plus-lighter" v-model="enablePlPhoto"/>
+      plus-lighter
     </label>
   </p>
+  <p>plus-lighterだと、クロスフェードの途中での背景透過を防げます。</p>
 
   <address>Created by IKEDA Yasunobu, &copy; ICS INC.</address>
 </div>
 
+<script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.js"
+    }
+  }
+</script>
 
 <script type="module">
   import {
     ref,
     createApp,
     onMounted,
-  } from "https://unpkg.com/vue@3.2.21/dist/vue.esm-browser.js";
+  } from "vue";
 
   const app = createApp({
     setup() {
-      const enablePlLogo = ref(false);
-      const enablePlPhoto = ref(false);
+      const enablePlLogo = ref("plus-lighter");
+      const enablePlPhoto = ref("plus-lighter");
       const percent = ref(1.0);
       const photos = [
         "photo_1.webp",
@@ -212,7 +238,7 @@
             next = 0;
           }
           photoIndex.value = next;
-        }, 3_000);
+        }, 1_500);
       });
       return {
         enablePlLogo,
